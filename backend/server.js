@@ -19,19 +19,33 @@ app.get('/', (req, res) => {
 });
 
 // Placeholder routes for healthcare features
-app.get('/api/patients', (req, res) => {
-  res.json({ patients: [] }); // TODO: Connect DB
-});
+const patientRoutes = require('./routes/patients');
+app.use('/api/patients', patientRoutes);
 
-app.post('/api/patients', (req, res) => {
-  res.status(201).json({ message: 'Patient created' });
-});
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
 
-// DB connect placeholder
-/*
-const mongoose = require('mongoose');
-mongoose.connect(process.env.MONGO_URI);
-*/
+const doctorRoutes = require('./routes/doctors');
+app.use('/api/doctors', doctorRoutes);
+
+const appointmentRoutes = require('./routes/appointments');
+app.use('/api/appointments', appointmentRoutes);
+
+const medicalRecordRoutes = require('./routes/medicalRecords');
+app.use('/api/medicalRecords', medicalRecordRoutes);
+
+const billingRoutes = require('./routes/billing');
+app.use('/api/billing', billingRoutes);
+
+// Test PG connection on startup
+const pool = require('./config/db');
+pool.query('SELECT NOW()', (err) => {
+  if (err) {
+    console.error('Database connection failed:', err);
+  } else {
+    console.log('PostgreSQL connected successfully');
+  }
+});
 
 // Error handler
 app.use((err, req, res, next) => {

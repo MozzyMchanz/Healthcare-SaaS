@@ -1,9 +1,31 @@
-# TODO.md: Frontend Creation Plan
+const pool = require('../config/db');
 
-## Steps:
-- [x] Step 1: Completed ✅ Vite React frontend created successfully.
-- [x] Step 2: Dev server running at http://localhost:5173/ (Vite uses `npm run dev`).
-- [x] Step 3: No errors, task complete. Frontend ready!
+const Doctor = {
+  findAll: (callback) => {
+    pool.query('SELECT * FROM doctors ORDER BY created_at DESC', (err, res) => {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, res.rows);
+    });
+  },
 
-Updated as steps complete.
+  create: (doctorData, callback) => {
+    const { name, specialty, phone, availability } = doctorData;
+    const query = `
+      INSERT INTO doctors (name, specialty, phone, availability) 
+      VALUES ($1, $2, $3, $4) 
+      RETURNING *
+    `;
+    const values = [name, specialty, phone, availability];
+    pool.query(query, values, (err, res) => {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, res.rows[0]);
+    });
+  }
+};
+
+module.exports = Doctor;
 
