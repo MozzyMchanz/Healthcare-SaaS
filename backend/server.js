@@ -8,9 +8,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(helmet());
-app.use(cors({
-  origin: 'http://localhost:5173' // Vite frontend
-}));
+app.use(cors({\n  origin: ['http://localhost:5173', 'https://healthcare-saas-mozzymchanzs-projects.vercel.app']\n}));
 app.use(express.json());
 
 // Basic route
