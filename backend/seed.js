@@ -3,20 +3,18 @@ const pool = require('./config/db');
 const seedData = async () => {
   try {
     // Patients
-    await pool.query(`INSERT INTO patients (name, dob, phone, email, address) VALUES 
-      ('John Doe', '1980-01-01', '123456789', 'john@example.com', '123 Main St')
-      ON CONFLICT DO NOTHING`);
+await pool.query(`INSERT INTO patients (name, phone) VALUES 
+      ('John Doe', '123456789') ON CONFLICT (id) DO NOTHING`);
 
     // Doctors
-    await pool.query(`INSERT INTO doctors (name, specialty, phone, availability) VALUES 
-      ('Dr. Smith', 'Cardiology', '987654321', 'Mon-Fri 9-5')
-      ON CONFLICT DO NOTHING`);
+await pool.query(`INSERT INTO doctors (name, phone) VALUES 
+      ('Dr. Smith', '987654321') ON CONFLICT (id) DO NOTHING`);
 
     // Users (admin)
     const bcrypt = require('bcryptjs');
     const hash = bcrypt.hashSync('pass123', 10);
-    await pool.query(`INSERT INTO users (username, password_hash, role) VALUES 
-      ('admin', '${hash}', 'admin')
+    await pool.query(`INSERT INTO users (email, password, role) VALUES 
+      ('admin@example.com', '${hash}', 'admin')
       ON CONFLICT DO NOTHING`);
 
     console.log('Seed complete!');

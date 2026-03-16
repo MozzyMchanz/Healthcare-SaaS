@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { LogIn, User } from 'lucide-react';
 
 const Login = () => {
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
+const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -32,15 +32,15 @@ const Login = () => {
         </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Username</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
             <div className="relative">
               <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <input
                 type="text"
-                value={credentials.username}
-                onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
+                value={credentials.email}
+                onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="admin"
+              placeholder="admin@example.com"
                 required
               />
             </div>
@@ -66,7 +66,7 @@ const Login = () => {
           </button>
         </form>
         <p className="mt-6 text-xs text-gray-500 text-center">
-          Default: username: admin | password: pass123 (register first)
+        Default: email: admin@example.com | password: pass123 (register first)
         </p>
       </div>
     </div>
