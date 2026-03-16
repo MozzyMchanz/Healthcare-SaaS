@@ -1,10 +1,8 @@
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5000/api';
+const API_BASE = import.meta.env.DEV ? 'http://localhost:5000/api' : '/api';
 
-const api = axios.create({
-  baseURL: API_BASE,
-});
+const api = axios.create({\n  baseURL: API_BASE,\n  timeout: 10000,\n});
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token');
