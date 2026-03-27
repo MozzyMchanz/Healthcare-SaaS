@@ -14,7 +14,8 @@ exports.register = (req, res) => {
 
     User.create({ email, password, role }, (err, newUser) => {
       if (err) return res.status(500).json({ error: err.message });
-      const token = jwt.sign({ id: newUser.id, role: newUser.role }, process.env.JWT_SECRET || 'fallback-secret', { expiresIn: '1h' });
+      if (!process.env.JWT_SECRET) return res.status(500).json({ error: 'Server configuration error' });
+      const token = jwt.sign({ id: newUser.id, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
       res.status(201).json({ success: true, token, user: { id: newUser.id, email: newUser.email, role: newUser.role } });
     });
   });
@@ -29,7 +30,8 @@ exports.login = (req, res) => {
     bcrypt.compare(password, user.password, (err, match) => {
       if (err || !match) return res.status(400).json({ error: 'Invalid credentials' });
 
-      const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET || 'fallback-secret', { expiresIn: '1h' });
+      if (!process.env.JWT_SECRET) return res.status(500).json({ error: 'Server configuration error' });
+      const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
       res.json({ success: true, token, user: { id: user.id, email: user.email, role: user.role } });
     });
   });

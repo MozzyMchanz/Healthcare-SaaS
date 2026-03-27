@@ -16,7 +16,8 @@ app.get('/', (req, res) => {
   res.json({ message: 'Healthcare SaaS Backend API running!' });
 });
 
-// Placeholder routes for healthcare features
+// Mount routes with error handling
+try {
 const patientRoutes = require('./routes/patients');
 app.use('/api/patients', patientRoutes);
 
@@ -34,12 +35,15 @@ app.use('/api/medicalRecords', medicalRecordRoutes);
 
 const billingRoutes = require('./routes/billing');
 app.use('/api/billing', billingRoutes);
-
+} catch (routeErr) {
+  console.error('Route loading failed:', routeErr.message);
+}
 // Test PG connection on startup
 const pool = require('./config/db');
 pool.query('SELECT NOW()', (err) => {
   if (err) {
     console.error('Database connection failed:', err);
+    process.exit(1);
   } else {
     console.log('PostgreSQL connected successfully');
   }
